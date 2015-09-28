@@ -13,9 +13,10 @@ def main():
 
 	# 1. Initialize constant packet variables.
 	craftedPkt = IP()/TCP();
-	craftedPkt["TCP"].dport = args.dstPort;
+	craftedPkt["TCP"].dport = int(args.dstPort);
 	craftedPkt["IP"].dst = args.dstIp;
 	
+
 	# 2. Prompt user for secret message.
 	secret_message = raw_input("Enter your secret message: ")
 	print "Secret Message: " + secret_message
@@ -42,12 +43,17 @@ def main():
 
 	        #sleep for a random time before sending a packet.
 	        time.sleep(random.randint(1, int(args.waitTime)))
+
+	        #spoof source ip address.
+	        craftedPkt["IP"].src = "192.168.0." + str(random.randint(1, 200));
 	        send(craftedPkt)
 
 	# 5. Send message completion signal.
 	#After the entire message has been sent, send a packet with a source port of 25088.
 	craftedPkt["TCP"].sport = 25088;
 	send(craftedPkt);
+
+	print "\nMessage Sent."
 
 
 if __name__ == '__main__':
