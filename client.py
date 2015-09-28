@@ -6,7 +6,7 @@ import time
 cmdParser = argparse.ArgumentParser(description="8505A1-CovertChannel Client")
 cmdParser.add_argument('-d','--dstIp',dest='dstIp', help='Destination address of the host to send the message to.', required=True)
 cmdParser.add_argument('-p','--dstPort',dest='dstPort', help='Destination port of the host to send the message to.', required=True)
-cmdParser.add_argument('-w','--waitTime',dest='waitTime', help='The maximum wait time (seconds) in between sent packets.', required=True)
+cmdParser.add_argument('-w','--waitTime',dest='waitTime', help='The maximum wait time (milliseconds) in between sent packets.', required=True)
 args = cmdParser.parse_args();
 
 def main():
@@ -42,10 +42,9 @@ def main():
 	            craftedPkt["TCP"].sport = randPort;
 
 	        #sleep for a random time before sending a packet.
-	        time.sleep(random.randint(1, int(args.waitTime)))
-
+	        time.sleep(random.uniform(1/1000, int(args.waitTime)/1000))
+	        print "Source Port: " + craftedPkt["TCP"].sport
 	        #spoof source ip address.
-	        craftedPkt["IP"].src = "192.168.0." + str(random.randint(1, 200));
 	        send(craftedPkt)
 
 	# 5. Send message completion signal.
