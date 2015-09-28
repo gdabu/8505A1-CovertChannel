@@ -35,8 +35,7 @@ def parse(pkt):
     global bit_index;
     global secret_message;
 
-    print "Received " + `1` + " packets."
-    print "."
+
     
     # Analyze the source port for every packet,
     # Source ports less than 25088 equate to 0.
@@ -47,11 +46,14 @@ def parse(pkt):
     elif (pkt["TCP"].sport > 25088 ):
         bit = 1;
     elif (pkt["TCP"].sport == 25088):
-        print("\nMessage Received:")
-        print str(secret_messageByteArray)
-        print(secret_message)
+        print("\nComplete Message: " + secret_message)
+        print "\n" + str(secret_messageByteArray)
         globalReset()
         return
+
+    print "Received " + `1` + " packets."
+    print "Source Port" + pkt["TCP"].sport
+    print "."
 
     #Append the bit to the n'th element in secret_messageByteArray. n == character_index.
     secret_messageByteArray[character_index] += `bit`;
